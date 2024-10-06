@@ -12,7 +12,7 @@ from transformers import AutoModelForObjectDetection
 import torch
 import openai
 import os
-import fitz
+import pymupdf
 
 import qdrant_client
 from llama_index.core import SimpleDirectoryReader
@@ -39,7 +39,7 @@ st.write(
 
 def get_pdf_to_image(docs):
     if docs is not None:
-        with fitz.open(stream=docs.read(), filetype="pdf") as pdf_file:
+        with pymupdf.open(stream=docs.read(), filetype="pdf") as pdf_file:
             pdf_page_count = pdf_file.page_count   
             for page_number in range(pdf_page_count):  
                 # Get the page
