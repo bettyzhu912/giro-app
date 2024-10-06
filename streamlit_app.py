@@ -41,7 +41,7 @@ def get_pdf_to_image(docs):
         images = pdf2image.convert_from_bytes(docs.read())
         for i, image in enumerate(images):
             # Save the image
-            image_path = os.path.join(output_dir, f'page_{i+1}.png')
+            image_path = os.path.join(output_directory_path, f'page_{i+1}.png')
             image.save(image_path)
     return documents
 
