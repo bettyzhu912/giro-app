@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.patches import Patch
 import numpy as np
-import csv
 import json
 import pandas as pd
 from torchvision import transforms
