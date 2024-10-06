@@ -4,8 +4,6 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.patches import Patch
-import io
-from PIL import Image, ImageDraw
 import numpy as np
 import csv
 import json
