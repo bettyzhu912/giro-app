@@ -17,3 +17,4 @@ transformers
 torch
 openai
 llama-index-embeddings-clip
+pdf2image
