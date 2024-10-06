@@ -12,7 +12,7 @@ from transformers import AutoModelForObjectDetection
 import torch
 import openai
 import os
-import pymupdf
+import pdf2image
 
 import qdrant_client
 from llama_index.core import SimpleDirectoryReader
@@ -38,18 +38,11 @@ st.write(
 
 def get_pdf_to_image(docs):
     if docs is not None:
-        with pymupdf.open(stream=docs.read(), filetype="pdf") as pdf_file:
-            pdf_page_count = pdf_file.page_count   
-            for page_number in range(pdf_page_count):  
-                # Get the page
-                page = pdf_file[page_number]
-                # Convert the page to an image
-                pix = page.get_pixmap()
-                # Create a Pillow Image object from the pixmap
-                image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
-                # Save the image
-                image_path = os.path.join(output_dir, f'page_{i+1}.png')
-                image.save(image_path)
+        images = pdf2image.convert_from_bytes(docs.read())
+        for i, image in enumerate(images):
+            # Save the image
+            image_path = os.path.join(output_dir, f'page_{i+1}.png')
+            image.save(image_path)
     return documents
 
 def main():
