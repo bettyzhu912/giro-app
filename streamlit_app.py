@@ -38,7 +38,7 @@ st.write(
 
 def get_pdf_to_image(docs):
     if docs is not None:
-        images = pdf2image.convert_from_bytes(docs.read(),poppler_path='poppler-24.04.0\Library\bin')
+        images = pdf2image.convert_from_bytes(docs.read())
         for i, image in enumerate(images):
             # Save the image
             image_path = os.path.join(output_dir, f'page_{i+1}.png')
