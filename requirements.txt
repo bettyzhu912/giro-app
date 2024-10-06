@@ -16,5 +16,4 @@ torchvision
 transformers
 torch
 openai
-fitz
 llama-index-embeddings-clip
