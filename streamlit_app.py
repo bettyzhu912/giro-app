@@ -43,7 +43,7 @@ def get_pdf_to_image(docs):
             # Save the image
             image_path = os.path.join(output_directory_path, f'page_{i+1}.png')
             image.save(image_path)
-    return documents
+    return images
 
 def main():
     with st.sidebar:
