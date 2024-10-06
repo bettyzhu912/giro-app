@@ -26,6 +26,8 @@ from llama_index.core.indices.multi_modal.retriever import MultiModalVectorIndex
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+# os directory
 output_directory_path = "converted_images"
 if not os.path.exists(output_directory_path):
     os.makedirs(output_directory_path)
@@ -35,6 +37,22 @@ st.markdown("""## Professional Indemnity Insurance Underwriting System""")
 st.write(
     "(For 2024 IFoA GIRO Presentation)"
 )
+
+# Functions
+def empty_directory(directory_path):
+    # List all the files and subdirectories in the given directory
+    for filename in os.listdir(directory_path):
+        file_path = os.path.join(directory_path, filename)
+        
+        try:
+            # Check if it's a file and remove it
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.remove(file_path)
+            # If it's a directory, remove it using shutil.rmtree
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
 
 def get_pdf_to_image(docs):
     if docs is not None:
@@ -46,6 +64,7 @@ def get_pdf_to_image(docs):
     return images
 
 def main():
+    empty_directory(output_directory_path)
     with st.sidebar:
         st.title("Menu:")
         docs = st.file_uploader('Upload your document:', type="pdf")
