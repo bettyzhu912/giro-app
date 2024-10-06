@@ -58,7 +58,7 @@ def main():
         docs = st.file_uploader('Upload your document:', type="pdf")
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
-                raw_pdf_image = get_pdf_to_image(docs)
+                get_pdf_to_image(docs)
                 #text_chunks = get_text_chunks(raw_text)
                 #get_vector_store(text_chunks)
                 st.success("Done")
