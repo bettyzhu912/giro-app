@@ -42,7 +42,7 @@ def get_pdf_to_image(docs):
             pdf_page_count = pdf_file.page_count   
             for page_number in range(pdf_page_count):  
                 # Get the page
-                page = pdf_document[page_number]
+                page = pdf_file[page_number]
                 # Convert the page to an image
                 pix = page.get_pixmap()
                 # Create a Pillow Image object from the pixmap
