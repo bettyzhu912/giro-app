@@ -20,7 +20,6 @@ from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core.indices import MultiModalVectorStoreIndex
 from llama_index.core.schema import ImageDocument
-from llama_index.core.response.notebook_utils import display_source_node
 from llama_index.core.schema import ImageNode
 from llama_index.multi_modal_llms.openai import OpenAIMultiModal
 from llama_index.core.indices.multi_modal.retriever import MultiModalVectorIndexRetriever
