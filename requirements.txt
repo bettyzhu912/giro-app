@@ -18,4 +18,3 @@ torch
 openai
 fitz
 llama-index-embeddings-clip
-json
