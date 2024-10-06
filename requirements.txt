@@ -10,7 +10,6 @@ frontend
 git+https://github.com/openai/CLIP.git 
 easyocr
 matplotlib
-PIL
 numpy
 csv
 pandas
