@@ -219,7 +219,9 @@ def main():
     }
     st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
     #st.markdown("###### Give details below of all Principals (including details of sole principal)")
-    st.data_editor(df, column_config = config, num_rows= "dynamic")
+    if 'df' not in st.session_state:
+        st.session_state.df = pd.DataFrame(df)
+    st.data_editor(st.session_state.df, column_config = config, num_rows= "dynamic")
     
     # Left hand side activities
     with st.sidebar:
@@ -240,9 +242,10 @@ def main():
                 response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
                 response_text = response.text
                 st.write(response_text)
-                df = pd.DataFrame(json.loads(response_text)['data'])
-                df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
-                st.data_editor(df, column_config = config, num_rows= "dynamic")
+                updated_df = pd.DataFrame(json.loads(response_text)['data'])
+                updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
+                st.session_state.df = updated_df
+                
                 st.success("Done")
 
 if __name__ == "__main__":
