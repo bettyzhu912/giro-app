@@ -248,6 +248,7 @@ def main():
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
+        st.write('test')
 
 if __name__ == "__main__":
     main()
