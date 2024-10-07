@@ -68,6 +68,9 @@ def get_pdf_to_image(docs):
 def main():
     empty_directory(output_directory_path)
     # right hand side UI configuration 
+    name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
+    address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
+    activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
     df = pd.DataFrame(columns=['name', 'age', 'qualifications', 'date_qualified', 'numbers_of_years_in_this_capacity_with_the_proposer'])
     config = {
         'name' : st.column_config.TextColumn('Full Name', required=True),
