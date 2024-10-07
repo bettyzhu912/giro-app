@@ -33,10 +33,12 @@ if not os.path.exists(output_directory_path):
     os.makedirs(output_directory_path)
 
 # User Interface
+df = pd.DataFrame(columns=['name', 'age', 'qualifications', 'date_qualified', 'numbers_of_years_in_this_capacity_with_the_proposer']
 st.markdown("""## Professional Indemnity Insurance Underwriting System""")
 st.write(
     "(For 2024 IFoA GIRO Presentation)"
 )
+st.data_editor(df, num_rows="dynamic")
 
 # Functions
 def empty_directory(directory_path):
