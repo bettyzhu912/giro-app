@@ -17,6 +17,7 @@ import pdf2image
 from datetime import date
 from PIL import Image
 import fitz
+import copy
 
 import qdrant_client
 from llama_index.core import SimpleDirectoryReader
