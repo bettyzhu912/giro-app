@@ -1,5 +1,6 @@
 # Import packages
 import streamlit as st
+from streamlit import session_state as ss, rerun as rr
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
@@ -240,7 +241,7 @@ def main():
                 response_text = response.text
                 st.write(response_text)
                 df = pd.DataFrame(json.loads(response_text)['data'])
-                st.experimental_rerun()
+                st.data_editor(df, column_config = config, num_rows= "dynamic")
                 st.success("Done")
 
 if __name__ == "__main__":
