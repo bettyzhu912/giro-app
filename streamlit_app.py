@@ -200,10 +200,13 @@ def information_extractor(prompt, image_directory_path):
 def df_on_change(df):
     state = st.session_state["df_editor"]
     for index, updates in state["edited_rows"].items():
-        st.session_state["df"].loc[st.session_state["df"].index == index, "edited"] = True
         for key, value in updates.items():
             st.session_state["df"].loc[st.session_state["df"].index == index, key] = value
 
+def editor(config):
+    if "df" not in st.session_state:
+        st.session_state["df"] = df
+    st.data_editor(st.session_state["df"], key="df_editor", column_config = config, on_change=df_on_change, args=[df], num_rows= "dynamic")
 
 def main():
     # Empty directories
@@ -229,7 +232,8 @@ def main():
     #st.markdown("###### Give details below of all Principals (including details of sole principal)")
     if 'df' not in st.session_state:
         st.session_state.df = pd.DataFrame(df)
-    st.data_editor(st.session_state.df, column_config = config, key = 'table_editor', num_rows= "dynamic")
+    #st.data_editor(st.session_state.df, column_config = config,  num_rows= "dynamic")
+    editor(config)
     
     # Left hand side activities
     with st.sidebar:
@@ -250,10 +254,9 @@ def main():
                 response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
                 response_text = response.text
                 st.write(response_text)
-                updated_df = pd.DataFrame(json.loads(response_text)['data'])
-                updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
-                st.session_state.df = updated_df
-                st.data_editor(st.session_state.df, column_config = config, key = 'table_editor', num_rows= "dynamic")
+                df = pd.DataFrame(json.loads(response_text)['data'])
+                df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
+                editor()
                 st.success("Done")
 
 if __name__ == "__main__":
