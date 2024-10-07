@@ -38,7 +38,8 @@ st.markdown("""## Professional Indemnity Insurance Underwriting System""")
 st.write(
     "(For 2024 IFoA GIRO Presentation)"
 )
-    
+st.set_page_config(layout="wide")
+
 # Functions
 def empty_directory(directory_path):
     # List all the files and subdirectories in the given directory
@@ -70,7 +71,7 @@ def main():
     df = pd.DataFrame(columns=['name', 'age', 'qualifications', 'date_qualified', 'numbers_of_years_in_this_capacity_with_the_proposer'])
     config = {
         'name' : st.column_config.TextColumn('Full Name', required=True),
-        'age' : st.column_config.NumberColumn('Age (years)', width='small', min_value=0, max_value=122),
+        'age' : st.column_config.NumberColumn('Age (years)', min_value=0, max_value=122),
         'qualifications' : st.column_config.TextColumn('Qualifications', required=True),
         'date_qualified': st.column_config.DateColumn('Date Qualified', min_value=date(2000, 1, 1), max_value=date(2099, 1, 1), format="DD/MM/YYYY", step=1),
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
