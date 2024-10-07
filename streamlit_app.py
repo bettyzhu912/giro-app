@@ -153,6 +153,7 @@ def outputs_to_objects(outputs, img_size, id2label):
 
 def detect_and_crop_save_table(file_path):
     image = Image.open(file_path)
+    st.image(image)
     detection_transform = transforms.Compose(
         [
             MaxResize(800),
@@ -170,8 +171,7 @@ def detect_and_crop_save_table(file_path):
     id2label = model.config.id2label
     id2label[len(model.config.id2label)] = "no object"
     detected_tables = outputs_to_objects(outputs, image.size, id2label)
-    number = len(detected_tables)
-    st.write(number)
+    st.write(len(detected_tables))
     return detected_tables
     
 def main():
