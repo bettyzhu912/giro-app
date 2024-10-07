@@ -66,7 +66,7 @@ def get_pdf_to_image(docs):
 def main():
     empty_directory(output_directory_path)
     df = pd.DataFrame(columns=['name', 'age', 'qualifications', 'date_qualified', 'numbers_of_years_in_this_capacity_with_the_proposer'])
-    st.dataframe(df)
+    st.data_editor(df, num_rows= "dynamic")
     with st.sidebar:
         st.title("Menu:")
         docs = st.file_uploader('Upload your document:', type="pdf")
