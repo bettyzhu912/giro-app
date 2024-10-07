@@ -232,7 +232,7 @@ def main():
     #if 'df' not in st.session_state:
     #st.session_state.df = pd.DataFrame(df)
     #st.data_editor(st.session_state.df, column_config = config,  num_rows= "dynamic")
-    editor(df, config)
+    
     
     # Left hand side activities
     with st.sidebar:
@@ -256,6 +256,9 @@ def main():
                 df = pd.DataFrame(json.loads(response_text)['data'])
                 df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
                 st.success("Done")
+
+    # Right hand side update
+    editor(df, config)
 
 if __name__ == "__main__":
     main()
