@@ -77,7 +77,7 @@ def get_pdf_to_image(docs):
             # Create a Pillow Image object from the pixmap
             image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             # Save the image
-            image_path = os.path.join(output_directory_path, f'page_{i+1}.png')
+            image_path = os.path.join(output_directory_path, f'page_{page_number+1}.png')
             image.save(image_path)
     return images
 
