@@ -198,9 +198,9 @@ def main():
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
                 images = get_pdf_to_image(docs)
-                retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)
-                for file_path in retrieved_relevant_images:
-                    detect_and_crop_save_table(file_path)
+                # retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)   smarter, but more memory consuming
+                #for file_path in retrieved_relevant_images:
+                detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 #text_chunks = get_text_chunks(raw_text)
                 #get_vector_store(text_chunks)
                 st.success("Done")
