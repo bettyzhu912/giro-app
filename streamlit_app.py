@@ -88,6 +88,13 @@ def table_retrieve_relevant_images(directory_path):
 
 def detect_and_crop_save_table(retrieval_results):
     image = retrieval_results
+    detection_transform = transforms.Compose(
+        [
+            MaxResize(800),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+        ]
+    )
     pixel_values = detection_transform(image).unsqueeze(0).to(device)
 
     # forward pass
