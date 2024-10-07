@@ -27,6 +27,12 @@ from llama_index.core.indices.multi_modal.retriever import MultiModalVectorIndex
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 openai.api_key = st.secrets["OPENAI_API_KEY"]
+model = AutoModelForObjectDetection.from_pretrained(
+    "microsoft/table-transformer-detection", revision="no_timm"
+).to(device)
+structure_model = AutoModelForObjectDetection.from_pretrained(
+    "microsoft/table-transformer-structure-recognition-v1.1-all"
+).to(device)
 
 # os directory
 output_directory_path = "converted_images"
@@ -85,6 +91,58 @@ def table_retrieve_relevant_images(directory_path):
     # retrieve for the query using text to image retrieval
     retrieval_results = retriever_engine.text_to_image_retrieve(query)
     return retrieval_results
+
+class MaxResize(object):
+    def __init__(self, max_size=800):
+        self.max_size = max_size
+
+    def __call__(self, image):
+        width, height = image.size
+        current_max_size = max(width, height)
+        scale = self.max_size / current_max_size
+        resized_image = image.resize(
+            (int(round(scale * width)), int(round(scale * height)))
+        )
+
+        return resized_image
+
+def box_cxcywh_to_xyxy(x):
+    x_c, y_c, w, h = x.unbind(-1)
+    b = [(x_c - 0.5 * w), (y_c - 0.5 * h), (x_c + 0.5 * w), (y_c + 0.5 * h)]
+    return torch.stack(b, dim=1)
+
+
+def rescale_bboxes(out_bbox, size):
+    width, height = size
+    boxes = box_cxcywh_to_xyxy(out_bbox)
+    boxes = boxes * torch.tensor(
+        [width, height, width, height], dtype=torch.float32
+    )
+    return boxes
+
+
+def outputs_to_objects(outputs, img_size, id2label):
+    m = outputs.logits.softmax(-1).max(-1)
+    pred_labels = list(m.indices.detach().cpu().numpy())[0]
+    pred_scores = list(m.values.detach().cpu().numpy())[0]
+    pred_bboxes = outputs["pred_boxes"].detach().cpu()[0]
+    pred_bboxes = [
+        elem.tolist() for elem in rescale_bboxes(pred_bboxes, img_size)
+    ]
+
+    objects = []
+    for label, score, bbox in zip(pred_labels, pred_scores, pred_bboxes):
+        class_label = id2label[int(label)]
+        if not class_label == "no object":
+            objects.append(
+                {
+                    "label": class_label,
+                    "score": float(score),
+                    "bbox": [float(elem) for elem in bbox],
+                }
+            )
+
+    return objects
 
 def detect_and_crop_save_table(retrieval_results):
     image = retrieval_results
