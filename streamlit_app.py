@@ -184,7 +184,6 @@ def detect_and_crop_save_table(file_path):
         # crop detected table out of image
         cropped_table = image.crop(detected_tables[idx]["bbox"])
         cropped_table.save(os.path.join(cropped_table_directory_path, f'cropped_table_{idx}.png'))
-        st.image(cropped_table)
     return detected_tables
 
 def information_extractor(prompt, image_directory_path):
@@ -239,8 +238,9 @@ def main():
                 # Q4
                 response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
                 response_text = response.text
-                df = pd.DataFrame(json.loads(response_text)['data'])
-                st.experimental_rerun()
+                st.write(response_text)
+                #df = pd.DataFrame(json.loads(response_text)['data'])
+                #st.experimental_rerun()
                 st.success("Done")
 
 if __name__ == "__main__":
