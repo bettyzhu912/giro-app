@@ -237,10 +237,10 @@ def main():
                 # Q3
                 # Q4
                 response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
-                response_text = response.text
-                st.write(response_text)
+                response_text = response.text                
                 updated_df = pd.DataFrame(json.loads(response_text)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
+                st.write(updated_df)
                 st.success("Done")
 
     # Right hand side update
