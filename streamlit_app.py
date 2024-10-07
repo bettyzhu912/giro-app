@@ -13,6 +13,7 @@ import torch
 import openai
 import os
 import pdf2image
+from datetime import date
 
 import qdrant_client
 from llama_index.core import SimpleDirectoryReader
