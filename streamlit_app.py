@@ -253,14 +253,15 @@ def main():
                 response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
                 response_text = response.text
                 st.write(response_text)
-                df = pd.DataFrame(json.loads(response_text)['data'])
-                df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
-                editor(df,config)
+                updated_df = pd.DataFrame(json.loads(response_text)['data'])
+                updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
                 st.success("Done")
 
     # Right hand side update
     if df.empty:
         editor(df, config)
+    else:
+        editor(updated_df, config)
 
 if __name__ == "__main__":
     main()
