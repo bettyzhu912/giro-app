@@ -88,7 +88,7 @@ def table_retrieve_relevant_images(directory_path):
 
     # Retrieve top 2 images
     retriever_engine = index.as_retriever(image_similarity_top_k=2)
-    query = "name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
+    query = "page with a table column names contain: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
     # retrieve for the query using text to image retrieval
     retrieval_results = retriever_engine.text_to_image_retrieve(query)
     retrieved_images = []
