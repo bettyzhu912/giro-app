@@ -15,6 +15,7 @@ import os
 import pdf2image
 from datetime import date
 from PIL import Image
+import fitz
 
 import qdrant_client
 from llama_index.core import SimpleDirectoryReader
@@ -63,10 +64,18 @@ def empty_directory(directory_path):
         except Exception as e:
             print(f'Failed to delete {file_path}. Reason: {e}')
 
-def get_pdf_to_image(docs):
+def get_pdf_to_image(docs):    
     if docs is not None:
-        images = pdf2image.convert_from_bytes(docs.read())
-        for i, image in enumerate(images):
+        pdf_document = fitz.open(docs)
+
+        # Iterate through each page and convert to an image
+        for page_number in range(pdf_document.page_count):
+            # Get the page
+            page = pdf_document[page_number]
+            # Convert the page to an image
+            pix = page.get_pixmap()
+            # Create a Pillow Image object from the pixmap
+            image = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             # Save the image
             image_path = os.path.join(output_directory_path, f'page_{i+1}.png')
             image.save(image_path)
@@ -126,7 +135,6 @@ def rescale_bboxes(out_bbox, size):
         [width, height, width, height], dtype=torch.float32
     )
     return boxes
-
 
 def outputs_to_objects(outputs, img_size, id2label):
     m = outputs.logits.softmax(-1).max(-1)
