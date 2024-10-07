@@ -65,7 +65,8 @@ def get_pdf_to_image(docs):
             image.save(image_path)
     return images
 
-def table_retrieve_relevant_images(images):
+def table_retrieve_relevant_images(directory_path):
+    images = SimpleDirectoryReader(directory_path).load_data()
     # Create a local Qdrant vector store
     client = qdrant_client.QdrantClient(path="qdrant_index")
     text_store = QdrantVectorStore(client=client, collection_name="text_collection")
@@ -125,7 +126,7 @@ def main():
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
                 images = get_pdf_to_image(docs)
-                retrieved_relevant_images = table_retrieve_relevant_images(images)
+                retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)
                 for image in retrieved_images:
                     detect_and_crop_save_table(retrieved_relevant_images)
                 #text_chunks = get_text_chunks(raw_text)
