@@ -14,6 +14,7 @@ import openai
 import os
 import pdf2image
 from datetime import date
+from PIL import Image
 
 import qdrant_client
 from llama_index.core import SimpleDirectoryReader
@@ -90,7 +91,13 @@ def table_retrieve_relevant_images(directory_path):
     query = "name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
     # retrieve for the query using text to image retrieval
     retrieval_results = retriever_engine.text_to_image_retrieve(query)
-    return retrieval_results
+    retrieved_images = []
+    for res_node in retrieval_results:
+        if isinstance(res_node.node, ImageNode):
+            retrieved_images.append(res_node.node.metadata["file_path"])
+        else:
+            display_source_node(res_node, source_length=200)
+    return retrieved_images
 
 class MaxResize(object):
     def __init__(self, max_size=800):
@@ -144,8 +151,8 @@ def outputs_to_objects(outputs, img_size, id2label):
 
     return objects
 
-def detect_and_crop_save_table(retrieval_results):
-    image = retrieval_results
+def detect_and_crop_save_table(file_path):
+    image = Image.open(file_path)
     detection_transform = transforms.Compose(
         [
             MaxResize(800),
@@ -192,8 +199,8 @@ def main():
             with st.spinner("Processing..."):
                 images = get_pdf_to_image(docs)
                 retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)
-                for image in retrieved_relevant_images:
-                    detect_and_crop_save_table(image)
+                for file_path in retrieved_relevant_images:
+                    detect_and_crop_save_table(file_path)
                 #text_chunks = get_text_chunks(raw_text)
                 #get_vector_store(text_chunks)
                 st.success("Done")
