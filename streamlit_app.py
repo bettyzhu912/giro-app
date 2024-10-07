@@ -203,7 +203,7 @@ def df_on_change(df):
         for key, value in updates.items():
             st.session_state["df"].loc[st.session_state["df"].index == index, key] = value
 
-def editor(config):
+def editor(df,config):
     if "df" not in st.session_state:
         st.session_state["df"] = df
     st.data_editor(st.session_state["df"], key="df_editor", column_config = config, on_change=df_on_change, args=[df], num_rows= "dynamic")
@@ -232,7 +232,7 @@ def main():
     #if 'df' not in st.session_state:
     #st.session_state.df = pd.DataFrame(df)
     #st.data_editor(st.session_state.df, column_config = config,  num_rows= "dynamic")
-    editor(config)
+    editor(df, config)
     
     # Left hand side activities
     with st.sidebar:
@@ -255,7 +255,7 @@ def main():
                 st.write(response_text)
                 df = pd.DataFrame(json.loads(response_text)['data'])
                 df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
-                editor()
+                editor(df, config)
                 st.success("Done")
 
 if __name__ == "__main__":
