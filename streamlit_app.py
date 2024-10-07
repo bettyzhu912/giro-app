@@ -38,8 +38,11 @@ structure_model = AutoModelForObjectDetection.from_pretrained(
 
 # os directory
 output_directory_path = "converted_images"
+cropped_table_directory_path = "cropped_tables"
 if not os.path.exists(output_directory_path):
     os.makedirs(output_directory_path)
+if not os.path.exists(cropped_table_directory_path):
+    os.makedirs(cropped_table_directory_path)
 
 # User Interface
 st.set_page_config(layout="wide")
@@ -81,7 +84,7 @@ def get_pdf_to_image(docs):
             image.save(image_path)
     return image
 
-def table_retrieve_relevant_images(directory_path):
+def retrieve_relevant_images(directory_path, query):
     images = SimpleDirectoryReader(directory_path).load_data()
     # Create a local Qdrant vector store
     client = qdrant_client.QdrantClient(path="qdrant_index")
@@ -97,7 +100,6 @@ def table_retrieve_relevant_images(directory_path):
 
     # Retrieve top 2 images
     retriever_engine = index.as_retriever(image_similarity_top_k=2)
-    query = "bottom centre footer with '2', contain two tables, with 'Give details below of previous business experience, as appropriate, or attach curricula vitae', with 'Give details below of all Principals (including details of sole principal)', table with column names: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
     # retrieve for the query using text to image retrieval
     retrieval_results = retriever_engine.text_to_image_retrieve(query)
     retrieved_images = []
@@ -161,7 +163,6 @@ def outputs_to_objects(outputs, img_size, id2label):
 
 def detect_and_crop_save_table(file_path):
     image = Image.open(file_path)
-    st.image(image)
     detection_transform = transforms.Compose(
         [
             MaxResize(800),
@@ -179,11 +180,16 @@ def detect_and_crop_save_table(file_path):
     id2label = model.config.id2label
     id2label[len(model.config.id2label)] = "no object"
     detected_tables = outputs_to_objects(outputs, image.size, id2label)
-    st.write(len(detected_tables))
+    for idx in range(len(detected_tables)):
+        # crop detected table out of image
+        cropped_table = image.crop(detected_tables[idx]["bbox"])
+        cropped_table.save(os.path.join(cropped_table_directory_path, f'cropped_table_{idx}.png'))
+        st.image(cropped_table)
     return detected_tables
     
 def main():
     empty_directory(output_directory_path)
+    empty_directory(cropped_table_directory_path)
     # right hand side UI configuration 
     name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
     address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
@@ -206,8 +212,9 @@ def main():
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
                 images = get_pdf_to_image(docs)
-                # retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)   ## smarter, but more memory consuming
-                #for file_path in retrieved_relevant_images:
+                # query = "bottom centre footer with '2', contain two tables, with 'Give details below of previous business experience, as appropriate, or attach curricula vitae', with 'Give details below of all Principals (including details of sole principal)', table with column names: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
+                # retrieved_relevant_images = retrieve_relevant_images(output_directory_path)   ## smarter and dynamically finding the page based on query, but more memory consuming
+                # for file_path in retrieved_relevant_images:
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 #text_chunks = get_text_chunks(raw_text)
                 #get_vector_store(text_chunks)
