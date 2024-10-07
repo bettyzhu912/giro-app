@@ -88,7 +88,7 @@ def table_retrieve_relevant_images(directory_path):
 
     # Retrieve top 2 images
     retriever_engine = index.as_retriever(image_similarity_top_k=2)
-    query = "bottom centre footer with '2', with 'Give details below of all Principals (including details of sole principal)' table"
+    query = "bottom centre footer with '2', contain two tables, with 'Give details below of previous business experience, as appropriate, or attach curricula vitae', with 'Give details below of all Principals (including details of sole principal)', table with column names: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
     # retrieve for the query using text to image retrieval
     retrieval_results = retriever_engine.text_to_image_retrieve(query)
     retrieved_images = []
