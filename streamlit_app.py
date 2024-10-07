@@ -186,11 +186,25 @@ def detect_and_crop_save_table(file_path):
         cropped_table.save(os.path.join(cropped_table_directory_path, f'cropped_table_{idx}.png'))
         st.image(cropped_table)
     return detected_tables
+
+def information_extractor(prompt, image_directory_path):
+    image_documents = SimpleDirectoryReader(image_directory_path).load_data()
+    response = openai_mm_llm.complete(
+        prompt=prompt,
+        image_documents=image_documents,
+    )
+    return response
     
+
 def main():
+    # Empty directories
     empty_directory(output_directory_path)
     empty_directory(cropped_table_directory_path)
-    # right hand side UI configuration 
+    
+    # Prompts to feed in
+    prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response)"
+    
+    # Right hand side UI configuration 
     name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
     address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
     activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
@@ -205,7 +219,8 @@ def main():
     st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
     #st.markdown("###### Give details below of all Principals (including details of sole principal)")
     st.data_editor(df, column_config = config, num_rows= "dynamic")
-    # left hand side activities
+    
+    # Left hand side activities
     with st.sidebar:
         st.title("Menu:")
         docs = st.file_uploader('Upload your document:', type="pdf")
@@ -216,8 +231,15 @@ def main():
                 # retrieved_relevant_images = retrieve_relevant_images(output_directory_path)   ## smarter and dynamically finding the page based on query, but more memory consuming
                 # for file_path in retrieved_relevant_images:
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
-                #text_chunks = get_text_chunks(raw_text)
-                #get_vector_store(text_chunks)
+                st.info("Extracting information...⌛️")
+                # Q1
+                # Q2
+                # Q3
+                # Q4
+                response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
+                response_text = response.text
+                df = pd.DataFrame(json.loads(response_text)['data'])
+                st.experimental_rerun()
                 st.success("Done")
 
 if __name__ == "__main__":
