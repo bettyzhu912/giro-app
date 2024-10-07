@@ -127,7 +127,7 @@ def main():
             with st.spinner("Processing..."):
                 images = get_pdf_to_image(docs)
                 retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)
-                for image in retrieved_images:
+                for image in retrieved_relevant_images:
                     detect_and_crop_save_table(retrieved_relevant_images)
                 #text_chunks = get_text_chunks(raw_text)
                 #get_vector_store(text_chunks)
