@@ -45,6 +45,10 @@ if not os.path.exists(output_directory_path):
 if not os.path.exists(cropped_table_directory_path):
     os.makedirs(cropped_table_directory_path)
 
+# Create de key
+if 'dek' not in ss:
+    ss.dek = str(uuid.uuid4())
+
 # User Interface
 st.set_page_config(layout="wide")
 st.markdown("""## Professional Indemnity Insurance Underwriting System""")
@@ -196,6 +200,13 @@ def information_extractor(prompt, image_directory_path):
     )
     return response
     
+def df_on_change(df):
+    state = st.session_state["df_editor"]
+    for index, updates in state["edited_rows"].items():
+        st.session_state["df"].loc[st.session_state["df"].index == index, "edited"] = True
+        for key, value in updates.items():
+            st.session_state["df"].loc[st.session_state["df"].index == index, key] = value
+
 
 def main():
     # Empty directories
@@ -221,7 +232,7 @@ def main():
     #st.markdown("###### Give details below of all Principals (including details of sole principal)")
     if 'df' not in st.session_state:
         st.session_state.df = pd.DataFrame(df)
-    st.data_editor(st.session_state.df, column_config = config, num_rows= "dynamic")
+    st.data_editor(st.session_state.df, column_config = config, key = 'table_editor', num_rows= "dynamic")
     
     # Left hand side activities
     with st.sidebar:
@@ -245,7 +256,7 @@ def main():
                 updated_df = pd.DataFrame(json.loads(response_text)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
                 st.session_state.df = updated_df
-                
+                st.data_editor(st.session_state.df, column_config = config, key = 'table_editor', num_rows= "dynamic")
                 st.success("Done")
 
 if __name__ == "__main__":
