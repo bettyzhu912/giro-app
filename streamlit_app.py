@@ -202,7 +202,7 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
-    prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response), give me consistent response no matter when i ask"
+    prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
     name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
