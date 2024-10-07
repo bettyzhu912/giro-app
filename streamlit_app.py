@@ -34,11 +34,11 @@ if not os.path.exists(output_directory_path):
     os.makedirs(output_directory_path)
 
 # User Interface
+st.set_page_config(layout="wide")
 st.markdown("""## Professional Indemnity Insurance Underwriting System""")
 st.write(
     "(For 2024 IFoA GIRO Presentation)"
 )
-st.set_page_config(layout="wide")
 
 # Functions
 def empty_directory(directory_path):
