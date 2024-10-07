@@ -255,10 +255,12 @@ def main():
                 st.write(response_text)
                 df = pd.DataFrame(json.loads(response_text)['data'])
                 df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
+                editor(df,config)
                 st.success("Done")
 
     # Right hand side update
-    editor(df, config)
+    if df.empty:
+        editor(df, config)
 
 if __name__ == "__main__":
     main()
