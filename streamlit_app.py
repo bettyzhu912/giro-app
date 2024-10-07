@@ -45,9 +45,6 @@ if not os.path.exists(output_directory_path):
 if not os.path.exists(cropped_table_directory_path):
     os.makedirs(cropped_table_directory_path)
 
-# Create de key
-if 'dek' not in ss:
-    ss.dek = str(uuid.uuid4())
 
 # User Interface
 st.set_page_config(layout="wide")
