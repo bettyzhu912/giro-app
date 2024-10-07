@@ -242,7 +242,6 @@ def main():
                 response_text = response.text                
                 updated_df = pd.DataFrame(json.loads(response_text)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
-                st.write(updated_df)
                 st.success("Done")
 
     # Right hand side update
