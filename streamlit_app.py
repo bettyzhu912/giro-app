@@ -79,7 +79,7 @@ def main():
         'date_qualified': st.column_config.DateColumn('Date Qualified', min_value=date(2000, 1, 1), max_value=date(2099, 1, 1), format="DD/MM/YYYY", step=1),
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
-    st.markdown("### Give details below of all Principals (including details of sole principal)")
+    st.markdown("###### Give details below of all Principals (including details of sole principal)")
     st.data_editor(df, column_config = config, num_rows= "dynamic")
     # left hand side activities
     with st.sidebar:
