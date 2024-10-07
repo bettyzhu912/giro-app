@@ -239,8 +239,8 @@ def main():
                 response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
                 response_text = response.text
                 st.write(response_text)
-                #df = pd.DataFrame(json.loads(response_text)['data'])
-                #st.experimental_rerun()
+                df = pd.DataFrame(json.loads(response_text)[0])
+                st.experimental_rerun()
                 st.success("Done")
 
 if __name__ == "__main__":
