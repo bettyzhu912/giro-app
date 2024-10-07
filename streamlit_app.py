@@ -66,7 +66,7 @@ def empty_directory(directory_path):
 
 def get_pdf_to_image(docs):    
     if docs is not None:
-        pdf_document = fitz.open(docs)
+        pdf_document = fitz.open(stream=docs.read(), filetype="pdf")
 
         # Iterate through each page and convert to an image
         for page_number in range(pdf_document.page_count):
@@ -206,7 +206,7 @@ def main():
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
                 images = get_pdf_to_image(docs)
-                # retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)   smarter, but more memory consuming
+                # retrieved_relevant_images = table_retrieve_relevant_images(output_directory_path)   ## smarter, but more memory consuming
                 #for file_path in retrieved_relevant_images:
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 #text_chunks = get_text_chunks(raw_text)
