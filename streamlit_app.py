@@ -79,7 +79,7 @@ def get_pdf_to_image(docs):
             # Save the image
             image_path = os.path.join(output_directory_path, f'page_{page_number+1}.png')
             image.save(image_path)
-    return images
+    return image
 
 def table_retrieve_relevant_images(directory_path):
     images = SimpleDirectoryReader(directory_path).load_data()
