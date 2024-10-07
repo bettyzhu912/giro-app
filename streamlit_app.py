@@ -38,7 +38,10 @@ st.markdown("""## Professional Indemnity Insurance Underwriting System""")
 st.write(
     "(For 2024 IFoA GIRO Presentation)"
 )
-
+with st.container():
+    st.write("Data Editor in a container below:")
+    st.data_editor(df, num_rows="dynamic")
+    
 # Functions
 def empty_directory(directory_path):
     # List all the files and subdirectories in the given directory
@@ -66,7 +69,6 @@ def get_pdf_to_image(docs):
 
 def main():
     empty_directory(output_directory_path)
-    st.data_editor(df, num_rows="dynamic")
     with st.sidebar:
         st.title("Menu:")
         docs = st.file_uploader('Upload your document:', type="pdf")
