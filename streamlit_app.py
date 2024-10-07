@@ -229,9 +229,8 @@ def main():
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
     st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
-    #st.markdown("###### Give details below of all Principals (including details of sole principal)")
-    if 'df' not in st.session_state:
-        st.session_state.df = pd.DataFrame(df)
+    #if 'df' not in st.session_state:
+    #st.session_state.df = pd.DataFrame(df)
     #st.data_editor(st.session_state.df, column_config = config,  num_rows= "dynamic")
     editor(config)
     
