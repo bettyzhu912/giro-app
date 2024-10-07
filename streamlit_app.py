@@ -241,6 +241,7 @@ def main():
                 response_text = response.text
                 st.write(response_text)
                 df = pd.DataFrame(json.loads(response_text)['data'])
+                df['date_qualified'] = pd.to_datetime(df['date_qualified'], format='%Y-%m-%d')
                 st.data_editor(df, column_config = config, num_rows= "dynamic")
                 st.success("Done")
 
