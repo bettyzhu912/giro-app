@@ -65,6 +65,42 @@ def get_pdf_to_image(docs):
             image.save(image_path)
     return images
 
+def table_retrieve_relevant_images(images):
+    # Create a local Qdrant vector store
+    client = qdrant_client.QdrantClient(path="qdrant_index")
+    text_store = QdrantVectorStore(client=client, collection_name="text_collection")
+    image_store = QdrantVectorStore(client=client, collection_name="image_collection")
+    storage_context = StorageContext.from_defaults(vector_store=text_store, image_store=image_store)
+
+    # Create the MultiModal index
+    index = MultiModalVectorStoreIndex.from_documents(
+        images,
+        storage_context=storage_context,
+    )
+
+    # Retrieve top 2 images
+    retriever_engine = index.as_retriever(image_similarity_top_k=2)
+    query = "name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer"
+    # retrieve for the query using text to image retrieval
+    retrieval_results = retriever_engine.text_to_image_retrieve(query)
+    return retrieval_results
+
+def detect_and_crop_save_table(retrieval_results):
+    image = retrieval_results
+    pixel_values = detection_transform(image).unsqueeze(0).to(device)
+
+    # forward pass
+    with torch.no_grad():
+        outputs = model(pixel_values)
+
+    # postprocess to get detected tables
+    id2label = model.config.id2label
+    id2label[len(model.config.id2label)] = "no object"
+    detected_tables = outputs_to_objects(outputs, image.size, id2label)
+    number = len(detected_tables)
+    st.write(number)
+    return detected_tables
+    
 def main():
     empty_directory(output_directory_path)
     # right hand side UI configuration 
@@ -88,7 +124,10 @@ def main():
         docs = st.file_uploader('Upload your document:', type="pdf")
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
-                get_pdf_to_image(docs)
+                images = get_pdf_to_image(docs)
+                retrieved_relevant_images = table_retrieve_relevant_images(images)
+                for image in retrieved_images:
+                    detect_and_crop_save_table(retrieved_relevant_images)
                 #text_chunks = get_text_chunks(raw_text)
                 #get_vector_store(text_chunks)
                 st.success("Done")
