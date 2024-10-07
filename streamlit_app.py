@@ -197,17 +197,6 @@ def information_extractor(prompt, image_directory_path):
     )
     return response
     
-def df_on_change(df):
-    state = st.session_state["df_editor"]
-    for index, updates in state["edited_rows"].items():
-        for key, value in updates.items():
-            st.session_state["df"].loc[st.session_state["df"].index == index, key] = value
-
-def editor(df,config):
-    if "df" not in st.session_state:
-        st.session_state["df"] = df
-    st.data_editor(st.session_state["df"], key="df_editor", column_config = config, on_change=df_on_change, args=[df], num_rows= "dynamic")
-
 def main():
     # Empty directories
     empty_directory(output_directory_path)
@@ -229,9 +218,6 @@ def main():
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
     st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
-    #if 'df' not in st.session_state:
-    #st.session_state.df = pd.DataFrame(df)
-    #st.data_editor(st.session_state.df, column_config = config,  num_rows= "dynamic")
     
     
     # Left hand side activities
@@ -259,9 +245,9 @@ def main():
 
     # Right hand side update
     if df.empty:
-        editor(df, config)
+        st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
-        editor(updated_df, config)
+        st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
 
 if __name__ == "__main__":
     main()
