@@ -210,6 +210,7 @@ def main():
     address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
     activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
     df = pd.DataFrame(columns=['name', 'age', 'qualifications', 'date_qualified', 'numbers_of_years_in_this_capacity_with_the_proposer'])
+    updated_df = df.deepcopy()
     config = {
         'name' : st.column_config.TextColumn('Full Name', required=True),
         'age' : st.column_config.NumberColumn('Age (years)', min_value=0, max_value=122),
@@ -244,7 +245,7 @@ def main():
                 st.success("Done")
 
     # Right hand side update
-    if df.empty:
+    if df.empty and updated_df.empty:
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
