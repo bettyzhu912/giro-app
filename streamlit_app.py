@@ -254,7 +254,7 @@ def main():
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
         name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
-        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", str(response_text_1), key="address")
+        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_1), key="address")
         activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
