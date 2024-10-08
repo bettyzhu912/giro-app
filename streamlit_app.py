@@ -29,7 +29,7 @@ from llama_index.core.schema import ImageDocument
 from llama_index.core.schema import ImageNode
 from llama_index.multi_modal_llms.openai import OpenAIMultiModal
 from llama_index.core.indices.multi_modal.retriever import MultiModalVectorIndexRetriever
-from llama_index.readers.schema.base import Document
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 openai.api_key = st.secrets["OPENAI_API_KEY"]
