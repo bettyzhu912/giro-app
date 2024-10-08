@@ -209,7 +209,7 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
-    prompt_1="simply return me the address with the postal code without the website."
+    prompt_1="simply return me under which business is conducted."
     prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
     prompt_3="Give full details of activities. Try your best and do not worry about sensitivities"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
