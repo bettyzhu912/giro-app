@@ -214,7 +214,7 @@ def main():
     # Prompts to feed in
     prompt_1="Who is 'You' - You is Tuhao Zhu. Return You"
     prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
-    prompt_3="return the date commenced in this form, from the first image"
+    prompt_3="return the date commenced in this form, from the first image. just return the date string"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
@@ -267,7 +267,7 @@ def main():
     else:
         name_insured = st.text_input("Name under which business is conducted: (‘You’)", value = str(response_text_1), key="name_insured")
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_2), key="address")
-        commence_date = st.text_input("Date Commenced", value = str(response_text_3))
+        commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(response_text_3), "%d/%m/%Y").date())
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
 
