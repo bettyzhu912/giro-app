@@ -256,6 +256,8 @@ def main():
                 response_text_4 = response_4.text                
                 updated_df = pd.DataFrame(json.loads(response_text_4)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
+                if 'key' not in st.session_state:
+                    st.session_state['key'] = updated_df
                 st.success("Done")
 
         check_q = st.number_input("Question #:", key="check",format="%0f")
@@ -278,7 +280,7 @@ def main():
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_2), key="address")
         commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(response_text_3), "%d/%m/%Y").date())
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
-        st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
+        st.data_editor(st.session_state.key, column_config = config,  num_rows= "dynamic")
 
 if __name__ == "__main__":
     main()
