@@ -214,7 +214,7 @@ def main():
     # Prompts to feed in
     prompt_1="Who is 'You' - You is Tuhao Zhu. Return You"
     prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
-    prompt_3="what is the date commenced in this form"
+    prompt_3="return the date commenced in this form, from the first image"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
@@ -247,7 +247,7 @@ def main():
                 response_2 = information_extractor(prompt_2, os.path.join(output_directory_path))
                 response_text_2 = response_2.text
                 # Q3
-                response_3 = information_extractor(prompt_3, os.path.join(output_directory_path, f'page_1.png'), single_image = True)
+                response_3 = information_extractor(prompt_3, os.path.join(output_directory_path))
                 response_text_3 = response_3.text
                 # Q4
                 response_4 = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
