@@ -29,6 +29,7 @@ from llama_index.core.schema import ImageDocument
 from llama_index.core.schema import ImageNode
 from llama_index.multi_modal_llms.openai import OpenAIMultiModal
 from llama_index.core.indices.multi_modal.retriever import MultiModalVectorIndexRetriever
+from llama_index.readers.schema.base import Document
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -203,6 +204,7 @@ def information_extractor(prompt, image_directory_path, single_image = False):
         image_documents=image_documents,
     )
     return response
+
     
 def main():
     # Empty directories
@@ -212,7 +214,7 @@ def main():
     # Prompts to feed in
     prompt_1="Who is 'You' - You is Tuhao Zhu. Return You"
     prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
-    prompt_3="What is the commence date"
+    prompt_3="extract all the texts from the image"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
