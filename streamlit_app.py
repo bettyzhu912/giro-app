@@ -189,7 +189,7 @@ def detect_and_crop_save_table(file_path):
         cropped_table.save(os.path.join(cropped_table_directory_path, f'cropped_table_{idx}.png'))
     return detected_tables
 
-def information_extractor(prompt, image_directory_path, single_page = FALSE):
+def information_extractor(prompt, image_directory_path, single_page = False):
     if single_page:
         image_documents = Image.open(image_directory_path)
     else:
@@ -234,7 +234,7 @@ def main():
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 st.info("Extracting information...⌛️")
                 # Q1
-                response_1 = information_extractor(prompt_1, os.path.join(output_directory_path, f'page_1.png'))
+                response_1 = information_extractor(prompt_1, os.path.join(output_directory_path, f'page_1.png'), single_page = True)
                 response_text_1 = response_1.text
                 # Q2
                 # Q3
