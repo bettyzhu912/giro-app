@@ -204,9 +204,9 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
-    prompt_1="on the first image in this collection, simply return me the name business under which is conducted. Do not return other words not in the document"
+    prompt_1="on the first image in this collection, simply return me the name in 1.a box. Do not return other words not in the document"
     prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
-    prompt_3="on the first image in this collection, simply return the words within the section box under give full details of activities you undertake and of any intended charge in these. Do not return other words not in the document"
+    prompt_3="on the first image in this collection, simply return the answer of '4. give full details of activities you undertake and of any intended charge in these'. Do not return other words not in the document"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
