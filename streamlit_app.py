@@ -272,7 +272,7 @@ def main():
                 
                 
     # Right hand side update
-    if df.empty and st.session_state.key.empty:
+    if df.empty and updated_df.empty and st.session_state.key.empty:
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
         commence_date = st.date_input("Date Commenced", value=None, key="commence_date")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
