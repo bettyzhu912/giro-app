@@ -189,12 +189,8 @@ def detect_and_crop_save_table(file_path):
         cropped_table.save(os.path.join(cropped_table_directory_path, f'cropped_table_{idx}.png'))
     return detected_tables
 
-def information_extractor(prompt, image_directory_path, single_page = False):
-    if single_page:
-        image_documents = []
-        image_documents.append(Image.open(image_directory_path))
-    else:
-        image_documents = SimpleDirectoryReader(image_directory_path).load_data()
+def information_extractor(prompt, image_directory_path):
+    image_documents = SimpleDirectoryReader(image_directory_path).load_data()
     openai_mm_llm = OpenAIMultiModal(model="gpt-4o-mini", api_key=openai.api_key, max_new_tokens=1500)
     response = openai_mm_llm.complete(
         prompt=prompt,
@@ -208,7 +204,7 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
-    prompt_1="simply return me the address with the postal code without the website."
+    prompt_1="on the first image in this collection, simply return me the address with the postal code without the website."
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
@@ -235,7 +231,7 @@ def main():
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 st.info("Extracting information...⌛️")
                 # Q1
-                response_1 = information_extractor(prompt_1, os.path.join(output_directory_path, f'page_1.png'), single_page = True)
+                response_1 = information_extractor(prompt_1, os.path.join(output_directory_path))
                 response_text_1 = response_1.text
                 # Q2
                 # Q3
