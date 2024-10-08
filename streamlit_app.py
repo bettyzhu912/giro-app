@@ -189,8 +189,11 @@ def detect_and_crop_save_table(file_path):
         cropped_table.save(os.path.join(cropped_table_directory_path, f'cropped_table_{idx}.png'))
     return detected_tables
 
-def information_extractor(prompt, image_directory_path):
-    image_documents = SimpleDirectoryReader(image_directory_path).load_data()
+def information_extractor(prompt, image_directory_path, single_page = FALSE):
+    if single_page:
+        image_documents = Image.open(image_directory_path)
+    else:
+        image_documents = SimpleDirectoryReader(image_directory_path).load_data()
     openai_mm_llm = OpenAIMultiModal(model="gpt-4o-mini", api_key=openai.api_key, max_new_tokens=1500)
     response = openai_mm_llm.complete(
         prompt=prompt,
@@ -204,14 +207,11 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
+    prompt_1="simply return me the address with the postal code without the website."
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
-    name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
-    address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
-    activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
     df = pd.DataFrame(columns=['name', 'age', 'qualifications', 'date_qualified', 'numbers_of_years_in_this_capacity_with_the_proposer'])
-    updated_df = copy.deepcopy(df)
     config = {
         'name' : st.column_config.TextColumn('Full Name', required=True),
         'age' : st.column_config.NumberColumn('Age (years)', min_value=0, max_value=122),
@@ -219,8 +219,7 @@ def main():
         'date_qualified': st.column_config.DateColumn('Date Qualified', min_value=date(2000, 1, 1), max_value=date(2099, 1, 1), format="DD/MM/YYYY", step=1),
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
-    st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
-    
+    updated_df = copy.deepcopy(df)
     
     # Left hand side activities
     with st.sidebar:
@@ -235,21 +234,30 @@ def main():
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 st.info("Extracting information...⌛️")
                 # Q1
+                response_1 = information_extractor(prompt_1, os.path.join(output_directory_path, f'page_1.png'))
+                response_text_1 = response_1.text
                 # Q2
                 # Q3
                 # Q4
-                response = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
-                response_text = response.text                
-                updated_df = pd.DataFrame(json.loads(response_text)['data'])
+                response_4 = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
+                response_text_4 = response_4.text                
+                updated_df = pd.DataFrame(json.loads(response_text_4)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
                 st.success("Done")
 
     # Right hand side update
     if df.empty and updated_df.empty:
+        name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
+        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
+        activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
+        st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
+        name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
+        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", str(response_text_1), key="address")
+        activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
+        st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
-        st.write('test')
 
 if __name__ == "__main__":
     main()
