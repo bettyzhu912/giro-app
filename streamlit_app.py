@@ -191,7 +191,8 @@ def detect_and_crop_save_table(file_path):
 
 def information_extractor(prompt, image_directory_path, single_page = False):
     if single_page:
-        image_documents = Image.open(image_directory_path)
+        image_documents = []
+        image_documents.append(Image.open(image_directory_path))
     else:
         image_documents = SimpleDirectoryReader(image_directory_path).load_data()
     openai_mm_llm = OpenAIMultiModal(model="gpt-4o-mini", api_key=openai.api_key, max_new_tokens=1500)
