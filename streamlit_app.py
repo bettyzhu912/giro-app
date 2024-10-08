@@ -257,13 +257,13 @@ def main():
     if df.empty and updated_df.empty:
         name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
-        commence_date = st.date_input("Date Commenced", key="date")
+        commence_date = st.date_input("Date Commenced", value=None, key="commence_date")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
         name_insured = st.text_input("Name under which business is conducted: (‘You’)", value = str(response_text_1), key="name_insured")
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_2), key="address")
-        commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(response_text_3), "%Y-%m-%d").date(), key="date")
+        commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(response_text_3), "%Y-%m-%d").date(), value=None, key="commence_date")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
 
