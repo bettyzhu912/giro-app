@@ -266,7 +266,6 @@ def main():
                 st.session_state.text2 = response_text_2
                 st.session_state.text3 = response_text_3
                 st.success("Done")
-                st.write(st.session_state.key)
 
         check_q = st.number_input("Question #:", key="check",format="%0f")
         if check_q: 
