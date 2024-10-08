@@ -204,7 +204,9 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
-    prompt_1="on the first image in this collection, simply return me the address with the postal code without the website."
+    prompt_1="on the first image in this collection, simply return me the name business under which is conducted. Do not return other words not in the document"
+    prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
+    prompt_3="on the first image in this collection, simply return the words within the section box under give full details of activities you undertake and of any intended charge in these. Do not return other words not in the document"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
@@ -234,7 +236,11 @@ def main():
                 response_1 = information_extractor(prompt_1, os.path.join(output_directory_path))
                 response_text_1 = response_1.text
                 # Q2
+                response_2 = information_extractor(prompt_2, os.path.join(output_directory_path))
+                response_text_2 = response_2.text
                 # Q3
+                response_3 = information_extractor(prompt_3, os.path.join(output_directory_path))
+                response_text_3 = response_3.text
                 # Q4
                 response_4 = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
                 response_text_4 = response_4.text                
@@ -250,9 +256,9 @@ def main():
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
-        name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
-        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_1), key="address")
-        activity = st.text_input("Give full details of activities you undertake and of any intended change in these", key="activity")
+        name_insured = st.text_input("Name under which business is conducted: (‘You’)", value = str(response_text_1), key="name_insured")
+        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_2), key="address")
+        activity = st.text_input("Give full details of activities you undertake and of any intended change in these", value = str(response_text_3), key="activity")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
 
