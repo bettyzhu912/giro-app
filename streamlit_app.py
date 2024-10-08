@@ -255,6 +255,7 @@ def main():
                 updated_df = pd.DataFrame(json.loads(response_text_4)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
                 st.success("Done")
+                st.image(os.path.join(output_directory_path, f'page_1.png'))
 
     # Right hand side update
     if df.empty and updated_df.empty:
