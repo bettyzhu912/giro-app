@@ -207,9 +207,6 @@ def information_extractor(prompt, image_directory_path, single_image = False):
 
     
 def main():
-    # Empty directories
-    empty_directory(output_directory_path)
-    empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
     prompt_1="describe section 1.a. who's the applicant's in this form "
@@ -232,6 +229,11 @@ def main():
     # Left hand side activities
     with st.sidebar:
         st.title("Menu:")
+        # Empty directories
+        if st.button("Reset",icon= "↩️"):
+            empty_directory(output_directory_path)
+            empty_directory(cropped_table_directory_path)
+            
         docs = st.file_uploader('Upload your document:', type="pdf")
         if st.button("Submit & Process", key="process_button"):  # Check if API key is provided before processing
             with st.spinner("Processing..."):
