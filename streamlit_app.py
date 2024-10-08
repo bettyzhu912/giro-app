@@ -224,8 +224,12 @@ def main():
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
     updated_df = copy.deepcopy(df)
-    if 'key' not in st.session_state:
+    if 'key' not in st.session_state:        
         st.session_state['key'] = copy.deepcopy(df)
+    if 'text2' not in st.session_state:        
+        st.session_state['text2'] = ''
+    if 'text3' not in st.session_state:        
+        st.session_state['text3'] = ''    
     name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
     
     # Left hand side activities
@@ -258,7 +262,9 @@ def main():
                 response_text_4 = response_4.text                
                 updated_df = pd.DataFrame(json.loads(response_text_4)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
-
+                st.session_state.key = updated_df
+                st.session_state.text2 = response_text_2
+                st.session_state.text3 = response_text_3
                 st.success("Done")
                 st.write(st.session_state.key)
 
@@ -279,10 +285,10 @@ def main():
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
-        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_2), key="address")
-        commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(response_text_3), "%d/%m/%Y").date())
+        address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(st.session_state.text2), key="address")
+        commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(st.session_state.text3), "%d/%m/%Y").date())
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
-        st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
+        st.data_editor(st.session_state.key, column_config = config,  num_rows= "dynamic")
 
 if __name__ == "__main__":
     main()
