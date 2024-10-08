@@ -260,6 +260,7 @@ def main():
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
 
                 st.success("Done")
+                st.write(st.session_state.key)
 
         check_q = st.number_input("Question #:", key="check",format="%0f")
         if check_q: 
