@@ -259,7 +259,7 @@ def main():
         check_q = st.number_input("Question #:", key="check")
         if check_q: 
             st.button("Check against pdf", key="process_button")
-            if check_q = 4:
+            if check_q == 4:
                 st.image(os.path.join(output_directory_path, f'page_2.png'))
             elif check_q < 4:
                 st.image(os.path.join(output_directory_path, f'page_1.png'))
