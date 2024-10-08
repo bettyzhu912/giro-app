@@ -224,6 +224,8 @@ def main():
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
     updated_df = copy.deepcopy(df)
+    if 'key' not in st.session_state:
+        st.session_state['key'] = copy.deepcopy(df)
     name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
     
     # Left hand side activities
@@ -256,8 +258,7 @@ def main():
                 response_text_4 = response_4.text                
                 updated_df = pd.DataFrame(json.loads(response_text_4)['data'])
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
-                if 'key' not in st.session_state:
-                    st.session_state['key'] = updated_df
+
                 st.success("Done")
 
         check_q = st.number_input("Question #:", key="check",format="%0f")
@@ -271,7 +272,7 @@ def main():
                 
                 
     # Right hand side update
-    if df.empty and updated_df.empty:
+    if df.empty and st.session_state.key.empty:
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
         commence_date = st.date_input("Date Commenced", value=None, key="commence_date")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
