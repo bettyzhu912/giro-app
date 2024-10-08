@@ -256,7 +256,7 @@ def main():
                 updated_df['date_qualified'] = pd.to_datetime(updated_df['date_qualified'], format='%Y-%m-%d')
                 st.success("Done")
 
-        check_q = st.number_input("Question #:", key="check",format="0.0f")
+        check_q = st.number_input("Question #:", key="check",format=":0.0f")
         if check_q: 
             st.button("Check against pdf", key="process_button")
             if check_q == 4:
