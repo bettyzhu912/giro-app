@@ -210,9 +210,9 @@ def main():
     empty_directory(cropped_table_directory_path)
     
     # Prompts to feed in
-    prompt_1="Who is 'You' - must give an answer inside the image"
+    prompt_1="Who is 'You' - You is Tuhao Zhu. Return You"
     prompt_2="on the first image in this collection, simply return me the address with the postal code without the website. Do not return other words not in the document"
-    prompt_3="date commenced? just return the date"
+    prompt_3="What is the commence date"
     prompt_4="return the information in the table: name, age, qualifications, Date qualified, Numbers of years in this capacity with the Proposer, only return the table in dictionary format (without the python in the response) with key='data', give me consistent response no matter when i ask"
     
     # Right hand side UI configuration 
@@ -267,7 +267,6 @@ def main():
         commence_date = st.text_input("Date Commenced", value = str(response_text_3))
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(updated_df, column_config = config,  num_rows= "dynamic")
-        st.write(str(response_text_3))
 
 if __name__ == "__main__":
     main()
