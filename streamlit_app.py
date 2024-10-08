@@ -227,6 +227,7 @@ def main():
         'numbers_of_years_in_this_capacity_with_the_proposer': st.column_config.NumberColumn('# of Years in this capacity with the proposer', min_value=0, max_value=122, width='large')
     }
     updated_df = copy.deepcopy(df)
+    name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
     
     # Left hand side activities
     with st.sidebar:
@@ -241,13 +242,12 @@ def main():
                 detect_and_crop_save_table(os.path.join(output_directory_path, f'page_2.png'))
                 st.info("Extracting information...⌛️")
                 # Q1
-                response_1 = information_extractor(prompt_1, os.path.join(output_directory_path, f'page_1.png'),single_image = True)
-                response_text_1 = response_1.text
+                # User entry for demo
                 # Q2
                 response_2 = information_extractor(prompt_2, os.path.join(output_directory_path))
                 response_text_2 = response_2.text
                 # Q3
-                response_3 = information_extractor(prompt_3, os.path.join(output_directory_path))
+                response_3 = information_extractor(prompt_3, os.path.join(output_directory_path, f'page_1.png'),single_image = True)
                 response_text_3 = response_3.text
                 # Q4
                 response_4 = information_extractor(prompt_4, os.path.join(cropped_table_directory_path))
@@ -258,13 +258,11 @@ def main():
 
     # Right hand side update
     if df.empty and updated_df.empty:
-        name_insured = st.text_input("Name under which business is conducted: (‘You’)", key="name_insured")
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", key="address")
         commence_date = st.date_input("Date Commenced", value=None, key="commence_date")
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
         st.data_editor(df, column_config = config,  num_rows= "dynamic")
     else:
-        name_insured = st.text_input("Name under which business is conducted: (‘You’)", value = str(response_text_1), key="name_insured")
         address = st.text_input("Addresses of all of your offices & percentage of total fees in each", value = str(response_text_2), key="address")
         commence_date = st.date_input("Date Commenced", value = datetime.strptime(str(response_text_3), "%d/%m/%Y").date())
         st.markdown("<p style='font-size:14px; color:black;'>Give details below of all Principals (including details of sole principal)</p>", unsafe_allow_html=True)
